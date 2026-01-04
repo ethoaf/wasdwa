@@ -1174,28 +1174,9 @@ LPH_JIT_MAX(function()
                     Mango.Visuals.WalkSpeed = DrawText(Gui)
                 end
     
-                if not Mango.Visuals.DoubleTap then
-                    Mango.Visuals.DoubleTap = DrawText(Gui)
-                end
+                
     
-                if shared["F​F​l​a​g​A​X​C​o​m​b​i​n​e​G​e​t​O​u​t​f​i​t​D​i​s​p​a​t​c​h​e​s​I​X​P​2"].Universal.Indicators.Enabled and shared["F​F​l​a​g​A​X​C​o​m​b​i​n​e​G​e​t​O​u​t​f​i​t​D​i​s​p​a​t​c​h​e​s​I​X​P​2"].Modifications['Double Tap'].Enabled and Mango.Visuals.DoubleTap then
-                    local viewportSize = Camera.ViewportSize
-                    local centerX = viewportSize.X / 2
-                    local centerY = viewportSize.Y / 2
-        
-                    Mango.Visuals.DoubleTap.Position = UDim2.new(
-                        0, centerX - (Mango.Visuals.DoubleTap.Size.X.Offset / 2) - 900,  
-                        0, centerY - (Mango.Visuals.DoubleTap.Size.Y.Offset / 2) + 120 
-                    )
-                    
-                    if Mango.Locals.DoubleTapState then
-                        Mango.Visuals.DoubleTap.TextColor3 = Color3.fromRGB(255, 0, 0)
-                    else
-                        Mango.Visuals.DoubleTap.TextColor3 = Color3.fromRGB(255, 255, 255)
-                    end
-                    Mango.Visuals.DoubleTap.Visible = shared["F​F​l​a​g​A​X​C​o​m​b​i​n​e​G​e​t​O​u​t​f​i​t​D​i​s​p​a​t​c​h​e​s​I​X​P​2"].Modifications['Double Tap'].Enabled and Mango.Locals.IsDoubleTapping
-                    Mango.Visuals.DoubleTap.Text = "DT"
-                end
+                
     
                 if shared["F​F​l​a​g​A​X​C​o​m​b​i​n​e​G​e​t​O​u​t​f​i​t​D​i​s​p​a​t​c​h​e​s​I​X​P​2"].Universal.Indicators.Enabled and shared["F​F​l​a​g​A​X​C​o​m​b​i​n​e​G​e​t​O​u​t​f​i​t​D​i​s​p​a​t​c​h​e​s​I​X​P​2"].Physics.Walking.Enabled and Mango.Visuals.WalkSpeed then
                     local viewportSize = Camera.ViewportSize
@@ -2517,16 +2498,7 @@ LPH_JIT_MAX(function()
                         }
         
         
-                        local DoubleTap
-                        if shared["F​F​l​a​g​A​X​C​o​m​b​i​n​e​G​e​t​O​u​t​f​i​t​D​i​s​p​a​t​c​h​e​s​I​X​P​2"].Modifications['Double Tap'].Enabled and table.find(shared["F​F​l​a​g​A​X​C​o​m​b​i​n​e​G​e​t​O​u​t​f​i​t​D​i​s​p​a​t​c​h​e​s​I​X​P​2"].Modifications['Double Tap'].Weapon, Tool.Name) then
-                            if Mango.Locals.IsDoubleTapping then
-                                DoubleTap = true
-                            else
-                                DoubleTap = false
-                            end
-                        else
-                            DoubleTap = false
-                        end
+                        
         
                         if shared["F​F​l​a​g​A​X​C​o​m​b​i​n​e​G​e​t​O​u​t​f​i​t​D​i​s​p​a​t​c​h​e​s​I​X​P​2"].Modifications['Cooldown Reduction'].Enabled then
                             if shared["F​F​l​a​g​A​X​C​o​m​b​i​n​e​G​e​t​O​u​t​f​i​t​D​i​s​p​a​t​c​h​e​s​I​X​P​2"].Modifications['Cooldown Reduction'].Weapon[Tool.Name] and not Mango.Locals.IsTriggerBotting then
@@ -2551,11 +2523,7 @@ LPH_JIT_MAX(function()
         
         
                         local BeamCol 
-                        if (shared["F​F​l​a​g​A​X​C​o​m​b​i​n​e​G​e​t​O​u​t​f​i​t​D​i​s​p​a​t​c​h​e​s​I​X​P​2"].Modifications['Beam Color'].Enabled) then
-                            BeamCol = shared["F​F​l​a​g​A​X​C​o​m​b​i​n​e​G​e​t​O​u​t​f​i​t​D​i​s​p​a​t​c​h​e​s​I​X​P​2"].Modifications['Beam Color'].Color
-                        else
-                            BeamCol = Color3.new(1, 0.545098, 0.14902)
-                        end
+                        BeamCol = Color3.new(1, 0.545098, 0.14902)
         
                         local function ShootFunc(GunType, SilentAim)
                             if GunType == "Shotgun" then
@@ -2627,33 +2595,6 @@ LPH_JIT_MAX(function()
                                 if Check and (NoClueWhatThisIs.Value >= 1 and (not _G.GUN_COMBAT_TOGGLE and DaHood.CanShoot(Self.Character))) then
                                     Ticks[Tool.Name] = tick()
                                     local HitPosition = Mango.Locals.HitPosition 
-                                    if DoubleTap then
-                                        ToolEvent:FireServer("Shoot")
-                                        Mango.Locals.DoubleTapState = true
-                                        local AimPosition
-                                        local ForcedOrigin = Tool:FindFirstChild("Default") and (Tool.Default:FindFirstChild("Mesh") and Tool.Default.Mesh:FindFirstChild("Muzzle")) or {
-                                            ["WorldPosition"] = (ToolHandle.CFrame * WeaponOffset).Position
-                                        }
-                        
-                                        local WeaponRange = Tool:WaitForChild("Range")
-                                        if SilentAim and (Self.Character.HumanoidRootPart.Position - Mango.Locals.SilentAimTarget.Character.HumanoidRootPart.Position).Magnitude < WeaponRange.Value then
-                                            AimPosition = HitPosition
-                                        else
-                                            AimPosition = ForcedOrigin.WorldPosition + DaHood.GetAim(ForcedOrigin.WorldPosition) * 200  
-                                        end
-                                        local Arg0, Arg1, Arg2 = DaHood.ShootGun({
-                                            ["Shooter"] = LocalCharacter,
-                                            ["Handle"] = ToolHandle,
-                                            ["ForcedOrigin"] = ForcedOrigin.WorldPosition or (ToolHandle.CFrame * WeaponOffset).Position,
-                                            ["AimPosition"] = AimPosition,
-                                            ["BeamColor"] = BeamCol,
-                                            ["LegitPosition"] = ForcedOrigin.WorldPosition + DaHood.GetAim(ForcedOrigin.WorldPosition) * 200,
-                                            ["Range"] = WeaponRange.Value
-                                        })
-                                        ReplicatedStorage.MainEvent:FireServer("ShootGun", ToolHandle, ForcedOrigin.WorldPosition, Arg0, Arg1, Arg2)
-                                        ToolEvent:FireServer()
-                                        Mango.Locals.DoubleTapState = false
-                                    end
                                     ToolEvent:FireServer("Shoot")
         
                                     local AimPosition
@@ -3712,7 +3653,6 @@ do
         local WalkSpeed = Enum.KeyCode[shared["F​F​l​a​g​A​X​C​o​m​b​i​n​e​G​e​t​O​u​t​f​i​t​D​i​s​p​a​t​c​h​e​s​I​X​P​2"].Physics.Walking.Toggle:upper()]
         local SilentAim = Enum.KeyCode[shared["F​F​l​a​g​A​X​C​o​m​b​i​n​e​G​e​t​O​u​t​f​i​t​D​i​s​p​a​t​c​h​e​s​I​X​P​2"].SilentAim.Toggle:upper()]
         local AimAssist = Enum.KeyCode[shared["F​F​l​a​g​A​X​C​o​m​b​i​n​e​G​e​t​O​u​t​f​i​t​D​i​s​p​a​t​c​h​e​s​I​X​P​2"].AimAssist.Toggle:upper()]
-        local DoubleTap = Enum.KeyCode[shared["F​F​l​a​g​A​X​C​o​m​b​i​n​e​G​e​t​O​u​t​f​i​t​D​i​s​p​a​t​c​h​e​s​I​X​P​2"].Modifications['Double Tap'].Toggle:upper()]
         local RaidAwareness = Enum.KeyCode[shared["F​F​l​a​g​A​X​C​o​m​b​i​n​e​G​e​t​O​u​t​f​i​t​D​i​s​p​a​t​c​h​e​s​I​X​P​2"]["Raid Awareness"]['Select']:upper()]
         local RaidAwarenessHide = Enum.KeyCode[shared["F​F​l​a​g​A​X​C​o​m​b​i​n​e​G​e​t​O​u​t​f​i​t​D​i​s​p​a​t​c​h​e​s​I​X​P​2"]["Raid Awareness"]['Clear']:upper()]
 
@@ -3720,9 +3660,7 @@ do
             Mango.Locals.IsWalkSpeeding = not Mango.Locals.IsWalkSpeeding
         end
 
-        if Input.KeyCode == DoubleTap then
-            Mango.Locals.IsDoubleTapping = not Mango.Locals.IsDoubleTapping
-        end
+       
 
         if (Input.KeyCode == RaidAwareness) then
             Main.SelectPriority()
